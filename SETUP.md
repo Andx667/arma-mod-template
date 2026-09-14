@@ -1,9 +1,10 @@
 # Setting up a new mod from this template
 
 This template captures the administrative/repo layer that's shared across
-`kam_compat_zen`, `civilian_presence_extended`, and `Camo_Faces_Redux`: CI,
-branch protection, funding, contributor docs, editor config, and the
-Steam Workshop description convention. It also ships a minimal, dependency-free
+`kam_compat_zen`, `civilian_presence_extended`, `Camo_Faces_Redux`,
+`tactical-tarps`, and `clear-hud-rewrite`: CI, branch protection, funding,
+contributor docs, editor config, and the Steam Workshop description
+convention. It also ships a minimal, dependency-free
 `addons/main` so a fresh clone actually builds (`hemtt check` / `hemtt build`
 both pass out of the box) — it's intentionally not a full CBA/ACE-integrated
 skeleton. If your mod depends on CBA_A3, swap `addons/main/script_mod.hpp`'s
@@ -29,17 +30,17 @@ so the placeholder values below avoid colliding with them):
 
 | Placeholder | Meaning | Where |
 |---|---|---|
-| `MOD_TITLE` | Human display name, e.g. `KAM Compat ZEN` | `README.md`, `mod.cpp`, `.hemtt/project.toml`, `workshop/steam_description.txt`, `addons/main/script_mod.hpp` (`#define MOD_NAME MOD_TITLE`) |
-| `MOD_REPO` | GitHub repo slug (URL-safe), e.g. `kam_compat_zen` | GitHub URLs in `README.md`/`mod.cpp`/`workshop/steam_description.txt`, `.github/workflows/release-drafter.yml`'s `if:`, `MOD_REPO.code-workspace` (filename too) |
+| `MOD_TITLE` | Human display name, e.g. `KAM Compat ZEN` | `README.md`, `mod.cpp`, `.hemtt/project.toml`, `workshop/steam_description.md`, `addons/main/script_mod.hpp` (`#define MOD_NAME MOD_TITLE`) |
+| `MOD_REPO` | GitHub repo slug (URL-safe), e.g. `kam_compat_zen` | GitHub URLs in `README.md`/`mod.cpp`/`workshop/steam_description.md`, `.github/workflows/release-drafter.yml`'s `if:`, `MOD_REPO.code-workspace` (filename too) |
 | `MOD_PREFIX` | HEMTT prefix / code namespace, e.g. `kcz` — lowercase, matches every addon's `#define COMPONENT` | `.hemtt/project.toml` (`prefix`), `addons/main/$PBOPREFIX$`, `addons/main/script_mod.hpp` (`#define PREFIX MOD_PREFIX`), `addons/main/stringtable.xml`, `.github/workflows/release.yml` (`FOLDER: '@MOD_PREFIX'`), `tools/stringtable_validator.py` (`PROJECT_NAME`) |
-| `MOD_ABBR` | Short abbreviation, e.g. `KCZ` | `README.md`, `workshop/steam_description.txt` |
+| `MOD_ABBR` | Short abbreviation, e.g. `KCZ` | `README.md`, `workshop/steam_description.md` |
 
 Also:
 
 | Placeholder | Where | Replace with |
 |---|---|---|
-| Workshop ID (`0` / `WORKSHOPID`) | `README.md` badges, `meta.cpp` (`publishedid`), `.github/workflows/release.yml`, `workshop/steam_description.txt` | The Steam Workshop item ID once the mod is published there |
-| `discord.gg/REPLACE_ME` | `README.md`, `workshop/steam_description.txt` | Real Discord invite, or delete the line if there isn't one yet |
+| Workshop ID (`0` / `WORKSHOPID`) | `README.md` badges, `meta.cpp` (`publishedid`), `.github/workflows/release.yml`, `workshop/steam_description.md` | The Steam Workshop item ID once the mod is published there |
+| `discord.gg/REPLACE_ME` | `README.md`, `workshop/steam_description.md` | Real Discord invite, or delete the line if there isn't one yet |
 | Dependencies line | `README.md`, `.github/release-drafter.yml`'s `template:` | Actual required addons, or the "no hard dependencies" wording if there are none |
 
 ## 3. Add repo secrets (for release.yml)
@@ -76,7 +77,27 @@ gh api --method POST -H "Accept: application/vnd.github+json" \
 JSON
 ```
 
-## 5. Everything else
+## 5. Keep CHANGELOG.md current, and know how hemtt publish uses it
+
+This template ships `CHANGELOG.md` (Keep a Changelog format) and a
+`workshop/steam_description.md` already wired into `.hemtt/project.toml`'s
+`[hemtt.publish]` section. Once your Steam Workshop item exists
+(`meta.cpp` has a real `publishedid`), `hemtt publish` builds the mod,
+converts both Markdown files to Steam Workshop BBCode, and uploads —
+no more hand-maintained BBCode.
+
+The changelog step specifically looks up the entry whose heading
+*exactly* matches the current project version (from
+`addons/main/script_version.hpp`) — so right before you publish a
+release, rename `## [Unreleased]` to `## [X.Y.Z] - YYYY-MM-DD` matching
+that version, and start a fresh empty `## [Unreleased]` above it. If
+there's no matching entry, `hemtt publish` fails with "No changelog
+entry found for version X.Y.Z".
+
+Add an entry under `## [Unreleased]` for every user-facing change as
+you make it — don't leave it to write itself at release time.
+
+## 6. Everything else
 
 - Add real `img/icon.png` / `img/icon_ca.paa` (referenced by `mod.cpp` and the README)
 - Fill in `workshop/` with real screenshots once you have them
