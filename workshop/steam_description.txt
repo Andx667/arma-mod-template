@@ -1,0 +1,29 @@
+[h1]MOD_NAME[/h1]
+
+[b]MOD_NAME[/b] (ABBR) one-sentence description of what the mod does.
+
+[h1]Requirements[/h1]
+
+[list]
+[*] [url=https://github.com/CBATeam/CBA_A3]CBA_A3[/url]
+[/list]
+
+[h1]Features[/h1]
+
+[list]
+[*] [b]Feature name[/b] — short description
+[/list]
+
+[h1]Source & Issues[/h1]
+
+Fully open-source. Bug reports, feature requests, and contributions are all welcome.
+
+[url=https://github.com/Andx667/MOD_NAME]GitHub Repository[/url]
+[url=https://github.com/Andx667/MOD_NAME/issues]Report an Issue[/url]
+[url=https://discord.gg/REPLACE_ME]Discord[/url]
+
+Licensed under [url=https://github.com/Andx667/MOD_NAME/blob/main/LICENSE]MIT[/url].
+
+---
+
+Suchst du eine deutschsprachige Arma3 und Reforger Community? -> https://tacticalteam.de/mitmachen

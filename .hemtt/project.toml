@@ -1,0 +1,15 @@
+name = "MOD_NAME"
+author = "Andx"
+prefix = "PREFIX"
+mainprefix = "z"
+
+[version]
+git_hash = 0
+
+[files]
+include = [
+    "mod.cpp",
+    "meta.cpp",
+    "LICENSE",
+    "README.md",
+]
