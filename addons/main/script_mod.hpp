@@ -9,7 +9,7 @@
 
 #define VERSION MAJOR.MINOR
 #define VERSION_STR MAJOR.MINOR.PATCH
-#define VERSION_AR MAJOR,MINOR,PATCH,BUILD
+#define VERSION_AR MAJOR,MINOR,PATCH
 #define VERSION_CONFIG version = VERSION; versionStr = QUOTE(VERSION_STR); versionAr[] = {VERSION_AR}
 
 // --- Minimal macro set (no CBA dependency; swap in CBA's
