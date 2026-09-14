@@ -1,12 +1,12 @@
-name			= "MOD_NAME v0.0.0";	// Name of your mod
+name			= "MOD_TITLE v0.0.0";	// Name of your mod
 author			= "Andx";					// Affects Arma 3 Launcher, when the mod are loaded as local
 logo			= "img\icon_ca.paa";			// Logo displayed in the main menu
 logoOver		= "img\icon_ca.paa";			// When the mouse is over, in the main menu
-tooltip			= "MOD_NAME";
-tooltipOwned	= "MOD_NAME";			// Tool tip displayed when the mouse is left over, in the main menu
+tooltip			= "MOD_TITLE";
+tooltipOwned	= "MOD_TITLE";			// Tool tip displayed when the mouse is left over, in the main menu
 picture			= "img\icon_ca.paa";			// Picture displayed from the expansions menu. Optimal size is 2048x1024
 actionName		= "GitHub";
-action			= "https://github.com/Andx667/MOD_NAME";	// Website URL, that can be accessed from the expansions menu
+action			= "https://github.com/Andx667/MOD_REPO";	// Website URL, that can be accessed from the expansions menu
 overview		= "One-sentence description of the mod.";	// Supports structured text
 hideName		= 0;						// Hide the extension name
 hidePicture		= 0;						// Hide the extension menu

@@ -1,6 +1,6 @@
-[h1]MOD_NAME[/h1]
+[h1]MOD_TITLE[/h1]
 
-[b]MOD_NAME[/b] (ABBR) one-sentence description of what the mod does.
+[b]MOD_TITLE[/b] (MOD_ABBR) one-sentence description of what the mod does.
 
 [h1]Requirements[/h1]
 
@@ -18,11 +18,11 @@
 
 Fully open-source. Bug reports, feature requests, and contributions are all welcome.
 
-[url=https://github.com/Andx667/MOD_NAME]GitHub Repository[/url]
-[url=https://github.com/Andx667/MOD_NAME/issues]Report an Issue[/url]
+[url=https://github.com/Andx667/MOD_REPO]GitHub Repository[/url]
+[url=https://github.com/Andx667/MOD_REPO/issues]Report an Issue[/url]
 [url=https://discord.gg/REPLACE_ME]Discord[/url]
 
-Licensed under [url=https://github.com/Andx667/MOD_NAME/blob/main/LICENSE]MIT[/url].
+Licensed under [url=https://github.com/Andx667/MOD_REPO/blob/main/LICENSE]MIT[/url].
 
 ---
 

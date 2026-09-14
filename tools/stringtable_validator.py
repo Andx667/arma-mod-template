@@ -26,7 +26,7 @@ import xml.etree.ElementTree as ET
 
 
 ######## GLOBALS #########
-PROJECT_NAME = "PREFIX"
+PROJECT_NAME = "MOD_PREFIX"
 ##########################
 
 

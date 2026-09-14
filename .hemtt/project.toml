@@ -1,17 +1,11 @@
-name = "MOD_NAME"
+name = "MOD_TITLE"
 author = "Andx"
-prefix = "PREFIX"
+prefix = "MOD_PREFIX"
 mainprefix = "z"
 
 [version]
-major = 0
-minor = 1
-patch = 0
-build = 0
+path = "addons/main/script_version.hpp"
 git_hash = 0
-# TEMPLATE: once you scaffold addons/main (`hemtt new`), switch to tracking
-# the version from addons/main/script_version.hpp instead, e.g.:
-# path = "addons/main/script_version.hpp"
 
 [files]
 include = [

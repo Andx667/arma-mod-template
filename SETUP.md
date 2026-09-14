@@ -3,10 +3,15 @@
 This template captures the administrative/repo layer that's shared across
 `kam_compat_zen`, `civilian_presence_extended`, and `Camo_Faces_Redux`: CI,
 branch protection, funding, contributor docs, editor config, and the
-Steam Workshop description convention. It does **not** include an addon
-code skeleton — for that, scaffold with `hemtt new <addon_name>` once
-you've cloned the new repo, or start from
-[DartsArmaMods/ModTemplate](https://github.com/DartsArmaMods/ModTemplate).
+Steam Workshop description convention. It also ships a minimal, dependency-free
+`addons/main` so a fresh clone actually builds (`hemtt check` / `hemtt build`
+both pass out of the box) — it's intentionally not a full CBA/ACE-integrated
+skeleton. If your mod depends on CBA_A3, swap `addons/main/script_mod.hpp`'s
+minimal macro block for CBA's real `script_macros_common.hpp` (see
+[DartsArmaMods/ModTemplate](https://github.com/DartsArmaMods/ModTemplate) for
+what that looks like). `hemtt new` only scaffolds a whole new project, not a
+single addon within an existing one — copy `addons/main` as a starting point for each new
+component instead.
 
 ## 1. Create the repo
 
@@ -18,14 +23,23 @@ gh repo create Andx667/<new-repo> --template Andx667/arma-mod-template --public 
 
 ## 2. Find-and-replace placeholders
 
+Four distinct tokens, deliberately not sharing text with any real macro name
+(`MOD_NAME`/`PREFIX` are actual CBA/HEMTT macro names used in the addon code,
+so the placeholder values below avoid colliding with them):
+
+| Placeholder | Meaning | Where |
+|---|---|---|
+| `MOD_TITLE` | Human display name, e.g. `KAM Compat ZEN` | `README.md`, `mod.cpp`, `.hemtt/project.toml`, `workshop/steam_description.txt`, `addons/main/script_mod.hpp` (`#define MOD_NAME MOD_TITLE`) |
+| `MOD_REPO` | GitHub repo slug (URL-safe), e.g. `kam_compat_zen` | GitHub URLs in `README.md`/`mod.cpp`/`workshop/steam_description.txt`, `.github/workflows/release-drafter.yml`'s `if:`, `MOD_REPO.code-workspace` (filename too) |
+| `MOD_PREFIX` | HEMTT prefix / code namespace, e.g. `kcz` — lowercase, matches every addon's `#define COMPONENT` | `.hemtt/project.toml` (`prefix`), `addons/main/$PBOPREFIX$`, `addons/main/script_mod.hpp` (`#define PREFIX MOD_PREFIX`), `addons/main/stringtable.xml`, `.github/workflows/release.yml` (`FOLDER: '@MOD_PREFIX'`), `tools/stringtable_validator.py` (`PROJECT_NAME`) |
+| `MOD_ABBR` | Short abbreviation, e.g. `KCZ` | `README.md`, `workshop/steam_description.txt` |
+
+Also:
+
 | Placeholder | Where | Replace with |
 |---|---|---|
-| `MOD_NAME` | `README.md`, `mod.cpp`, `.hemtt/project.toml`, `.github/workflows/release-drafter.yml`, `.github/workflows/release.yml`, `workshop/steam_description.txt`, `MOD_NAME.code-workspace` (filename too) | The mod's display name |
-| `PREFIX` | `.hemtt/project.toml`, `.github/workflows/release.yml` (`FOLDER: '@PREFIX'`), `tools/stringtable_validator.py` (`PROJECT_NAME`) | HEMTT prefix, e.g. `mymod` — lowercase, matches your addon folders' `#define COMPONENT` values |
-| `ABBR` | `README.md`, `workshop/steam_description.txt` | Short mod abbreviation |
-| Workshop ID (`0` / `WORKSHOPID`) | `README.md` badges, `.hemtt/project.toml` (once you have `meta.cpp`'s `publishedid`), `.github/workflows/release.yml`, `workshop/steam_description.txt` | The Steam Workshop item ID once the mod is published there |
+| Workshop ID (`0` / `WORKSHOPID`) | `README.md` badges, `meta.cpp` (`publishedid`), `.github/workflows/release.yml`, `workshop/steam_description.txt` | The Steam Workshop item ID once the mod is published there |
 | `discord.gg/REPLACE_ME` | `README.md`, `workshop/steam_description.txt` | Real Discord invite, or delete the line if there isn't one yet |
-| `Andx667/MOD_NAME` in `release-drafter.yml`'s `if:` | `.github/workflows/release-drafter.yml` | `Andx667/<new-repo-name>` |
 | Dependencies line | `README.md`, `.github/release-drafter.yml`'s `template:` | Actual required addons, or the "no hard dependencies" wording if there are none |
 
 ## 3. Add repo secrets (for release.yml)
@@ -65,6 +79,5 @@ JSON
 ## 5. Everything else
 
 - Add real `img/icon.png` / `img/icon_ca.paa` (referenced by `mod.cpp` and the README)
-- Scaffold your first addon (`hemtt new <name>`) — `check`/`validate`/`build` will have nothing to check until one exists
 - Fill in `workshop/` with real screenshots once you have them
 - Set repo topics (at minimum: `arma3`) and the repo description/homepage to the Steam Workshop URL once published

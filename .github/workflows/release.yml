@@ -14,9 +14,9 @@
 name: Release
 
 env:
-  FOLDER: '@PREFIX'
+  FOLDER: '@MOD_PREFIX'
   WORKSHOPID: '0'
-  WORKSHOPNAME: 'MOD_NAME'
+  WORKSHOPNAME: 'MOD_TITLE'
 
 on:
   release:
