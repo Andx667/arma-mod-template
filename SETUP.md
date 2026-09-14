@@ -69,7 +69,31 @@ gh api --method POST -H "Accept: application/vnd.github+json" \
 JSON
 ```
 
-## 4. Keep CHANGELOG.md current, and know how hemtt publish uses it
+## 4. Create the release-drafter labels
+
+Template repos don't carry labels over either. `.github/release-drafter.yml`
+categorizes PRs into the drafted release notes (and picks the major/minor/
+patch bump) by label — none of these exist on a freshly-created repo:
+
+```bash
+REPO=Andx667/<new-repo>
+gh label create "changelog/added" -R "$REPO" --color "0E8A16" --description "New feature or capability" --force
+gh label create "changelog/changed" -R "$REPO" --color "1D76DB" --description "Change in existing functionality" --force
+gh label create "changelog/deprecated" -R "$REPO" --color "FBCA04" --description "Soon-to-be removed feature" --force
+gh label create "changelog/removed" -R "$REPO" --color "B60205" --description "Removed feature (breaking, triggers a major bump)" --force
+gh label create "changelog/fixed" -R "$REPO" --color "5319E7" --description "Bug fix" --force
+gh label create "changelog/security" -R "$REPO" --color "D93F0B" --description "Security fix" --force
+gh label create "target/next-arma" -R "$REPO" --color "5C0007" --description "Targets an upcoming Arma version (triggers a major bump)" --force
+gh label create "ignore-changelog" -R "$REPO" --color "EDEDED" --description "Excluded from the drafted release changelog" --force
+gh label create "tools" -R "$REPO" --color "EDEDED" --description "Repo tooling/admin change, excluded from the changelog" --force
+```
+
+These six category names (`added`/`changed`/`deprecated`/`removed`/`fixed`/
+`security`) are deliberately the same as `CHANGELOG.md`'s Keep a Changelog
+categories — label a PR, and the drafted release note and the CHANGELOG.md
+entry you write for it use the same vocabulary.
+
+## 5. Keep CHANGELOG.md current, and know how hemtt publish uses it
 
 This template ships `CHANGELOG.md` (Keep a Changelog format) and a
 `workshop/steam_description.md` already wired into `.hemtt/project.toml`'s
@@ -95,7 +119,7 @@ entry found for version X.Y.Z".
 Add an entry under `## [Unreleased]` for every user-facing change as
 you make it — don't leave it to write itself at release time.
 
-## 5. Everything else
+## 6. Everything else
 
 - Add real `img/icon.png` / `img/icon_ca.paa` (referenced by `mod.cpp` and the README)
 - Fill in `workshop/` with real screenshots once you have them
