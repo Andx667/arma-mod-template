@@ -39,19 +39,11 @@ Also:
 
 | Placeholder | Where | Replace with |
 |---|---|---|
-| Workshop ID (`0` / `WORKSHOPID`) | `README.md` badges, `meta.cpp` (`publishedid`), `.github/workflows/release.yml`, `workshop/steam_description.md` | The Steam Workshop item ID once the mod is published there |
+| Workshop ID (`0`) | `README.md` badges, `meta.cpp` (`publishedid`), `workshop/steam_description.md` | The Steam Workshop item ID once the mod is published there |
 | `discord.gg/REPLACE_ME` | `README.md`, `workshop/steam_description.md` | Real Discord invite, or delete the line if there isn't one yet |
 | Dependencies line | `README.md`, `.github/release-drafter.yml`'s `template:` | Actual required addons, or the "no hard dependencies" wording if there are none |
 
-## 3. Add repo secrets (for release.yml)
-
-Settings → Secrets and variables → Actions:
-- `STEAM_USERNAME`
-- `STEAM_PASSWORD`
-
-(Skip if the mod won't auto-upload to Steam Workshop on release.)
-
-## 4. Apply branch protection
+## 3. Apply branch protection
 
 Template repos don't carry rulesets over. Once the repo exists, apply the
 same ruleset the other three repos share — block deletion/force-push,
@@ -77,14 +69,20 @@ gh api --method POST -H "Accept: application/vnd.github+json" \
 JSON
 ```
 
-## 5. Keep CHANGELOG.md current, and know how hemtt publish uses it
+## 4. Keep CHANGELOG.md current, and know how hemtt publish uses it
 
 This template ships `CHANGELOG.md` (Keep a Changelog format) and a
 `workshop/steam_description.md` already wired into `.hemtt/project.toml`'s
 `[hemtt.publish]` section. Once your Steam Workshop item exists
-(`meta.cpp` has a real `publishedid`), `hemtt publish` builds the mod,
-converts both Markdown files to Steam Workshop BBCode, and uploads —
-no more hand-maintained BBCode.
+(`meta.cpp` has a real `publishedid`), running `hemtt publish` locally
+(Steam must be running and logged in — it uses the desktop client, not
+a username/password secret) builds the mod, converts both Markdown
+files to Steam Workshop BBCode, and uploads — no more hand-maintained
+BBCode, and no CI secrets to manage for it.
+
+`release.yml` (CI) only builds the mod and attaches the zip to the
+GitHub release on publish — it no longer touches Steam Workshop at
+all, so there's nothing to configure there for that.
 
 The changelog step specifically looks up the entry whose heading
 *exactly* matches the current project version (from
@@ -97,7 +95,7 @@ entry found for version X.Y.Z".
 Add an entry under `## [Unreleased]` for every user-facing change as
 you make it — don't leave it to write itself at release time.
 
-## 6. Everything else
+## 5. Everything else
 
 - Add real `img/icon.png` / `img/icon_ca.paa` (referenced by `mod.cpp` and the README)
 - Fill in `workshop/` with real screenshots once you have them
