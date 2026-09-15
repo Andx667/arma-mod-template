@@ -26,7 +26,7 @@ __MOD_TITLE__ (MOD_ABBR) one-sentence description of what the mod does.
 The project is entirely __open-source__ and any contributions are welcome.
 
 Steam Workshop: <https://steamcommunity.com/sharedfiles/filedetails/?id=0>
-Discord: <https://discord.gg/REPLACE_ME>
+Discord: <https://discord.gg/ag4v6kxYAa>
 
 ## Features
 

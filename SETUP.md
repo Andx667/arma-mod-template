@@ -40,7 +40,7 @@ Also:
 | Placeholder | Where | Replace with |
 |---|---|---|
 | Workshop ID (`0`) | `README.md` badges, `meta.cpp` (`publishedid`), `workshop/steam_description.md` | The Steam Workshop item ID once the mod is published there |
-| `discord.gg/REPLACE_ME` | `README.md`, `workshop/steam_description.md` | Real Discord invite, or delete the line if there isn't one yet |
+| `discord.gg/ag4v6kxYAa` | `README.md`, `workshop/steam_description.md` | Already the shared invite all of Andx667's mods use — leave as-is unless this mod needs a different Discord |
 | Dependencies line | `README.md`, `.github/release-drafter.yml`'s `template:` | Actual required addons, or the "no hard dependencies" wording if there are none |
 
 ## 3. Apply branch protection
