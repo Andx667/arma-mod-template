@@ -1,31 +1,34 @@
 branches:
   - main
 
-name-template: 'Version $RESOLVED_VERSION'
-tag-template: 'v$RESOLVED_VERSION'
+# The version isn't resolved from PR labels — script_version.hpp and the
+# git tag created at release time are the source of truth. Retitle/retag
+# this draft to match before publishing.
+name-template: 'Unreleased'
+tag-template: 'unreleased'
 
 sort-by: title # sort alphabetically
 sort-direction: ascending
 
-# Categories match Keep a Changelog (https://keepachangelog.com/en/1.1.0/)
-# exactly, so a drafted release's notes and CHANGELOG.md read the same way.
+# Category names match Keep a Changelog (https://keepachangelog.com/en/1.1.0/)
+# so a drafted release's notes group changes the same way CHANGELOG.md does.
 categories:
-  - title: '### Added'
+  - title: 'Added'
     labels:
       - 'changelog/added'
-  - title: '### Changed'
+  - title: 'Changed'
     labels:
       - 'changelog/changed'
-  - title: '### Deprecated'
+  - title: 'Deprecated'
     labels:
       - 'changelog/deprecated'
-  - title: '### Removed'
+  - title: 'Removed'
     labels:
       - 'changelog/removed'
-  - title: '### Fixed'
+  - title: 'Fixed'
     labels:
       - 'changelog/fixed'
-  - title: '### Security'
+  - title: 'Security'
     labels:
       - 'changelog/security'
 
@@ -41,36 +44,8 @@ template: |
 
   ## Summary
 
-  ## Changelog
-
   $CHANGES
 
   ## Contributors
 
   $CONTRIBUTORS
-
-# target/next-arma triggers a Major bump (breaking Arma-version support
-# change); Removed items are treated as breaking too. Added/Changed/
-# Deprecated trigger Minor; Fixed/Security trigger Patch.
-version-resolver:
-  major:
-    labels:
-      - 'target/next-arma'
-      - 'changelog/removed'
-  minor:
-    labels:
-      - 'changelog/added'
-      - 'changelog/changed'
-      - 'changelog/deprecated'
-  patch:
-    labels:
-      - 'changelog/fixed'
-      - 'changelog/security'
-  default: patch
-
-replacers:
-  # Category titles
-  # Release Drafter automatically makes the category as ## Heading
-  # and we want them as ### Heading
-  - search: '/\#\# (\#\#\# (Added|Changed|Deprecated|Removed|Fixed|Security))/g'
-    replace: '$1'

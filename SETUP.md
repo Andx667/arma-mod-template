@@ -32,7 +32,7 @@ so the placeholder values below avoid colliding with them):
 |---|---|---|
 | `MOD_TITLE` | Human display name, e.g. `KAM Compat ZEN` | `README.md`, `mod.cpp`, `.hemtt/project.toml`, `workshop/steam_description.md`, `addons/main/script_mod.hpp` (`#define MOD_NAME MOD_TITLE`) |
 | `MOD_REPO` | GitHub repo slug (URL-safe), e.g. `kam_compat_zen` | GitHub URLs in `README.md`/`mod.cpp`/`workshop/steam_description.md`, `.github/workflows/release-drafter.yml`'s `if:`, `MOD_REPO.code-workspace` (filename too) |
-| `MOD_PREFIX` | HEMTT prefix / code namespace, e.g. `kcz` — lowercase, matches every addon's `#define COMPONENT` | `.hemtt/project.toml` (`prefix`), `addons/main/$PBOPREFIX$`, `addons/main/script_mod.hpp` (`#define PREFIX MOD_PREFIX`), `addons/main/stringtable.xml`, `.github/workflows/release.yml` (`FOLDER: '@MOD_PREFIX'`), `tools/stringtable_validator.py` (`PROJECT_NAME`) |
+| `MOD_PREFIX` | HEMTT prefix / code namespace, e.g. `kcz` — lowercase, matches every addon's `#define COMPONENT` | `.hemtt/project.toml` (`prefix`), `addons/main/$PBOPREFIX$`, `addons/main/script_mod.hpp` (`#define PREFIX MOD_PREFIX`), `addons/main/stringtable.xml`, `.github/workflows/release.yml` (`releases/MOD_PREFIX-latest.zip`, twice), `tools/stringtable_validator.py` (`PROJECT_NAME`) |
 | `MOD_ABBR` | Short abbreviation, e.g. `KCZ` | `README.md`, `workshop/steam_description.md` |
 
 Also:
@@ -72,18 +72,17 @@ JSON
 ## 4. Create the release-drafter labels
 
 Template repos don't carry labels over either. `.github/release-drafter.yml`
-categorizes PRs into the drafted release notes (and picks the major/minor/
-patch bump) by label — none of these exist on a freshly-created repo:
+categorizes PRs into the drafted release notes by label — none of these
+exist on a freshly-created repo:
 
 ```bash
 REPO=Andx667/<new-repo>
 gh label create "changelog/added" -R "$REPO" --color "0E8A16" --description "New feature or capability" --force
 gh label create "changelog/changed" -R "$REPO" --color "1D76DB" --description "Change in existing functionality" --force
 gh label create "changelog/deprecated" -R "$REPO" --color "FBCA04" --description "Soon-to-be removed feature" --force
-gh label create "changelog/removed" -R "$REPO" --color "B60205" --description "Removed feature (breaking, triggers a major bump)" --force
+gh label create "changelog/removed" -R "$REPO" --color "B60205" --description "Removed feature" --force
 gh label create "changelog/fixed" -R "$REPO" --color "5319E7" --description "Bug fix" --force
 gh label create "changelog/security" -R "$REPO" --color "D93F0B" --description "Security fix" --force
-gh label create "target/next-arma" -R "$REPO" --color "5C0007" --description "Targets an upcoming Arma version (triggers a major bump)" --force
 gh label create "ignore-changelog" -R "$REPO" --color "EDEDED" --description "Excluded from the drafted release changelog" --force
 gh label create "tools" -R "$REPO" --color "EDEDED" --description "Repo tooling/admin change, excluded from the changelog" --force
 ```
@@ -93,31 +92,47 @@ These six category names (`added`/`changed`/`deprecated`/`removed`/`fixed`/
 categories — label a PR, and the drafted release note and the CHANGELOG.md
 entry you write for it use the same vocabulary.
 
-## 5. Keep CHANGELOG.md current, and know how hemtt publish uses it
+(An earlier version of this template also had a `target/next-arma` label
+driving a `version-resolver` that auto-computed the next major/minor/patch
+from PR labels. Dropped — see below for why.)
+
+## 5. Keep CHANGELOG.md current — it's the source of truth, not release-drafter
+
+Versioning here is deliberately manual: **`addons/main/script_version.hpp`
+and the git tag you create at release time are the source of truth**, not
+anything release-drafter or PR labels compute. Release Drafter still drafts
+a release on every push to `main`, grouping merged PRs by the labels above
+into a "### Added" / "### Changed" / etc. skeleton (matching
+`CHANGELOG.md`'s categories exactly) — but its draft is always titled
+generic `Unreleased`, not a version number, and picking the *actual* next
+version (and whether it's a major/minor/patch bump) is a judgment call you
+make by hand.
+
+When you're ready to cut a release:
+
+1. Bump `MAJOR`/`MINOR`/`PATCH` in `addons/main/script_version.hpp` yourself
+2. In `CHANGELOG.md`, rename `## [Unreleased]` to `## [X.Y.Z] - YYYY-MM-DD`
+   matching that version, and start a fresh empty `## [Unreleased]` above it
+3. Retitle the drafted GitHub release from "Unreleased" to `vX.Y.Z` and set
+   its tag to match, then publish it — `release.yml` (CI) picks up from
+   there, builds, and attaches the zip
 
 This template ships `CHANGELOG.md` (Keep a Changelog format) and a
 `workshop/steam_description.md` already wired into `.hemtt/project.toml`'s
-`[hemtt.publish]` section. Once your Steam Workshop item exists
-(`meta.cpp` has a real `publishedid`), running `hemtt publish` locally
-(Steam must be running and logged in — it uses the desktop client, not
-a username/password secret) builds the mod, converts both Markdown
-files to Steam Workshop BBCode, and uploads — no more hand-maintained
-BBCode, and no CI secrets to manage for it.
+`[hemtt.publish]` section. Once your Steam Workshop item exists (`meta.cpp`
+has a real `publishedid`), running `hemtt publish` locally (Steam must be
+running and logged in — it uses the desktop client, not a username/password
+secret) builds the mod, converts both Markdown files to Steam Workshop
+BBCode, and uploads — no more hand-maintained BBCode, and no CI secrets to
+manage for it.
 
-`release.yml` (CI) only builds the mod and attaches the zip to the
-GitHub release on publish — it no longer touches Steam Workshop at
-all, so there's nothing to configure there for that.
+`hemtt publish`'s changelog step specifically looks up the entry whose
+heading *exactly* matches the current project version — so step 2 above
+has to happen before you run it, or it fails with "No changelog entry
+found for version X.Y.Z".
 
-The changelog step specifically looks up the entry whose heading
-*exactly* matches the current project version (from
-`addons/main/script_version.hpp`) — so right before you publish a
-release, rename `## [Unreleased]` to `## [X.Y.Z] - YYYY-MM-DD` matching
-that version, and start a fresh empty `## [Unreleased]` above it. If
-there's no matching entry, `hemtt publish` fails with "No changelog
-entry found for version X.Y.Z".
-
-Add an entry under `## [Unreleased]` for every user-facing change as
-you make it — don't leave it to write itself at release time.
+Add an entry under `## [Unreleased]` for every user-facing change as you
+make it — don't leave it to write itself at release time.
 
 ## 6. Everything else
 
