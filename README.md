@@ -1,6 +1,8 @@
 # MOD_TITLE
 
-![MOD_TITLE Logo](https://github.com/Andx667/MOD_REPO/blob/main/img/icon.png)
+<p align="center">
+    <img src="https://github.com/Andx667/MOD_REPO/blob/main/img/icon.png" alt="MOD_TITLE Logo">
+</p>
 
 <p align="center">
     <a href="https://github.com/Andx667/MOD_REPO/issues">
