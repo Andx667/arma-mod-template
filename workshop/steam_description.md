@@ -2,15 +2,15 @@
 
 **MOD_TITLE** (MOD_ABBR) one-sentence description of what the mod does.
 
-# Requirements
+## Requirements
 
 - [CBA_A3](https://github.com/CBATeam/CBA_A3)
 
-# Features
+## Features
 
 - **Feature name** — short description
 
-# Source & Issues
+## Source & Issues
 
 Fully open-source. Bug reports, feature requests, and contributions are all welcome.
 

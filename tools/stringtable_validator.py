@@ -14,15 +14,14 @@ import xml.etree.ElementTree as ET
 #   - no Original translation.
 #   - duplicated entries and languages.
 #
-# TEMPLATE NOTE: Package name attributes are expected to be lowercase,
-# matching the addon folder name and the lowercase `#define COMPONENT`
-# macro that CBA's LSTRING/CSTRING family compose their runtime string
-# keys from (e.g. LLSTRING(...) in an addon with `#define COMPONENT foo`
-# resolves to STR_<PREFIX>_foo_..., lowercase). If you titlecase a
-# Package name here without also changing COMPONENT (which is also your
-# addon's PBO/namespace prefix -- a much bigger rename), those keys will
-# stop matching what's requested at runtime and the string will fail to
-# resolve in-game.
+# TEMPLATE NOTE: Package name attributes (and the matching segment of
+# each Key ID below) are expected to be titlecase, matching
+# `COMPONENT_BEAUTIFIED` (see script_component.hpp) -- NOT the lowercase
+# `#define COMPONENT` that CBA's LSTRING/CSTRING family use to build the
+# runtime lookup key (e.g. LLSTRING(...) in an addon with
+# `#define COMPONENT foo` looks up STR_<PREFIX>_foo_..., all lowercase).
+# This is safe because Arma resolves string keys case-insensitively, so
+# a titlecase Key ID here still matches CBA's lowercase runtime lookup.
 
 
 ######## GLOBALS #########
@@ -58,6 +57,10 @@ def check_stringtable(filepath):
         errors += 1
     else:
         package_name = package.get("name")
+
+        if package_name.islower():
+            print("  ERROR: Package name attribute '{}' is all lowercase, should be in titlecase.".format(package_name))
+            errors += 1
 
         component_folder = os.path.basename(os.path.dirname(filepath))
         if package_name.lower() != component_folder:
