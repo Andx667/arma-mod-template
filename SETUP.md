@@ -30,7 +30,7 @@ so the placeholder values below avoid colliding with them):
 
 | Placeholder | Meaning | Where |
 |---|---|---|
-| `MOD_TITLE` | Human display name, e.g. `KAM Compat ZEN` | `README.md`, `mod.cpp`, `.hemtt/project.toml`, `workshop/steam_description.md`, `addons/main/script_mod.hpp` (`#define MOD_NAME MOD_TITLE`) |
+| `MOD_TITLE` | Human display name, e.g. `KAM Compat ZEN` | `README.md`, `mod.cpp`, `.hemtt/project.toml`, `workshop/steam_description.md`, `addons/main/script_mod.hpp` (`#define MOD_NAME MOD_TITLE`), `.github/workflows/discord-notice.yml` (`username`/`footer_title`) |
 | `MOD_REPO` | GitHub repo slug (URL-safe), e.g. `kam_compat_zen` | GitHub URLs in `README.md`/`mod.cpp`/`workshop/steam_description.md`, `.github/workflows/release-drafter.yml`'s `if:`, `.github/PULL_REQUEST_TEMPLATE.md`'s Development Guidelines link, `MOD_REPO.code-workspace` (filename too) |
 | `MOD_PREFIX` | HEMTT prefix / code namespace, e.g. `kcz` — lowercase, matches every addon's `#define COMPONENT` | `.hemtt/project.toml` (`prefix`), `addons/main/$PBOPREFIX$`, `addons/main/script_mod.hpp` (`#define PREFIX MOD_PREFIX`), `addons/main/stringtable.xml`, `.github/workflows/release.yml` (`releases/MOD_PREFIX-latest.zip`, twice), `tools/stringtable_validator.py` (`PROJECT_NAME`) |
 | `MOD_ABBR` | Short abbreviation, e.g. `KCZ` | `README.md`, `workshop/steam_description.md` |
@@ -134,7 +134,24 @@ found for version X.Y.Z".
 Add an entry under `## [Unreleased]` for every user-facing change as you
 make it — don't leave it to write itself at release time.
 
-## 6. Everything else
+## 6. Wire up the Discord release notice
+
+`.github/workflows/discord-notice.yml` posts to Discord whenever a GitHub
+release is published, via
+[SethCohen/github-releases-to-discord](https://github.com/SethCohen/github-releases-to-discord).
+It reads the webhook URL from a repo secret rather than a committed file —
+never hardcode a webhook URL in the workflow, it's a bearer credential
+anyone with repo-read access could post through:
+
+```bash
+gh secret set DISCORD_WEBHOOK_URL --repo Andx667/<new-repo> --body "<your Discord webhook URL>"
+```
+
+All of Andx667's mods currently share one webhook/channel for release
+notices — ask for that URL rather than creating a new one, unless this mod
+needs its own channel.
+
+## 7. Everything else
 
 - Add real `img/icon.png` / `img/icon_ca.paa` (referenced by `mod.cpp` and the README)
 - Fill in `workshop/` with real screenshots once you have them
