@@ -30,10 +30,10 @@ so the placeholder values below avoid colliding with them):
 
 | Placeholder | Meaning | Where |
 |---|---|---|
-| `MOD_TITLE` | Human display name, e.g. `KAM Compat ZEN` | `README.md`, `mod.cpp`, `.hemtt/project.toml`, `workshop/steam_description.md`, `addons/main/script_mod.hpp` (`#define MOD_NAME MOD_TITLE`), `.github/workflows/discord-notice.yml` (`username`/`footer_title`) |
-| `MOD_REPO` | GitHub repo slug (URL-safe), e.g. `kam_compat_zen` | GitHub URLs in `README.md`/`mod.cpp`/`workshop/steam_description.md`, `.github/workflows/release-drafter.yml`'s `if:`, `.github/PULL_REQUEST_TEMPLATE.md`'s Development Guidelines link, `MOD_REPO.code-workspace` (filename too) |
+| `MOD_TITLE` | Human display name, e.g. `KAM Compat ZEN` | `README.md`, `mod.cpp`, `.hemtt/project.toml`, `workshop/steam_description.md`, `addons/main/script_mod.hpp` (`#define MOD_NAME MOD_TITLE`), `.github/workflows/discord-notice.yml` (`username`/`footer_title`), `mkdocs.yml`, `docs/index.md` |
+| `MOD_REPO` | GitHub repo slug (URL-safe), e.g. `kam_compat_zen` | GitHub URLs in `README.md`/`mod.cpp`/`workshop/steam_description.md`, `.github/workflows/release-drafter.yml`'s `if:`, `.github/PULL_REQUEST_TEMPLATE.md`'s Development Guidelines link, `MOD_REPO.code-workspace` (filename too), `mkdocs.yml` and the `if:` of `.github/workflows/docs.yml` |
 | `MOD_PREFIX` | HEMTT prefix / code namespace, e.g. `kcz` — lowercase, matches every addon's `#define COMPONENT` | `.hemtt/project.toml` (`prefix`), `addons/main/$PBOPREFIX$`, `addons/main/script_mod.hpp` (`#define PREFIX MOD_PREFIX`), `addons/main/stringtable.xml`, `.github/workflows/release.yml` (`releases/MOD_PREFIX-latest.zip`, twice), `tools/stringtable_validator.py` (`PROJECT_NAME`) |
-| `MOD_ABBR` | Short abbreviation, e.g. `KCZ` | `README.md`, `workshop/steam_description.md` |
+| `MOD_ABBR` | Short abbreviation, e.g. `KCZ` | `README.md`, `workshop/steam_description.md`, `docs/index.md` |
 
 Also:
 
@@ -151,8 +151,35 @@ All of Andx667's mods currently share one webhook/channel for release
 notices — ask for that URL rather than creating a new one, unless this mod
 needs its own channel.
 
-## 7. Everything else
+## 7. Enable the docs
 
-- Add real `img/icon.png` / `img/icon_ca.paa` (referenced by `mod.cpp` and the README)
+The template ships a documentation site in `docs/`, configured by `mkdocs.yml`
+and built with [Zensical](https://zensical.org) (the successor of MkDocs
+Material, it reads the same `mkdocs.yml`). `.github/workflows/docs.yml` builds
+it and deploys it to GitHub Pages on every push to `main` that touches `docs/`.
+The workflow only runs for the repo named in its `if:`, so it stays quiet on the
+template itself and on forks.
+
+Pages has to be set to deploy from GitHub Actions once the repo exists:
+
+```bash
+gh api --method POST repos/Andx667/<new-repo>/pages -f build_type=workflow
+```
+
+Then fill in `docs/index.md`, add a page per addon or feature to `docs/` and to
+`nav:` in `mkdocs.yml`, and set the brand color in `docs/stylesheets/extra.css`.
+To preview locally:
+
+```
+pip install -r docs/requirements.txt
+zensical serve
+```
+
+If the mod does not need a site, delete `docs/`, `mkdocs.yml` and
+`.github/workflows/docs.yml`.
+
+## 8. Everything else
+
+- Add real `img/icon.png` / `img/icon_ca.paa` (referenced by `mod.cpp` and the README). Copy the png to `docs/icon.png` and enable `logo`/`favicon` in `mkdocs.yml`
 - Fill in `workshop/` with real screenshots once you have them
 - Set repo topics (at minimum: `arma3`) and the repo description/homepage to the Steam Workshop URL once published
