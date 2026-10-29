@@ -5,3 +5,6 @@ hemtt.exe
 *.biprivatekey
 *.hemttprivatekey
 releases
+
+# docs build
+site/
