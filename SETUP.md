@@ -30,9 +30,9 @@ so the placeholder values below avoid colliding with them):
 
 | Placeholder | Meaning | Where |
 |---|---|---|
-| `MOD_TITLE` | Human display name, e.g. `KAM Compat ZEN` | `README.md`, `mod.cpp`, `.hemtt/project.toml`, `workshop/steam_description.md`, `addons/main/script_mod.hpp` (`#define MOD_NAME MOD_TITLE`), `.github/workflows/discord-notice.yml` (`username`/`footer_title`), `mkdocs.yml`, `docs/index.md` |
-| `MOD_REPO` | GitHub repo slug (URL-safe), e.g. `kam_compat_zen` | GitHub URLs in `README.md`/`mod.cpp`/`workshop/steam_description.md`, `.github/workflows/release-drafter.yml`'s `if:`, `.github/PULL_REQUEST_TEMPLATE.md`'s Development Guidelines link, `MOD_REPO.code-workspace` (filename too), `mkdocs.yml` and the `if:` of `.github/workflows/docs.yml` |
-| `MOD_PREFIX` | HEMTT prefix / code namespace, e.g. `kcz` — lowercase, matches every addon's `#define COMPONENT` | `.hemtt/project.toml` (`prefix`), `addons/main/$PBOPREFIX$`, `addons/main/script_mod.hpp` (`#define PREFIX MOD_PREFIX`), `addons/main/stringtable.xml`, `.github/workflows/release.yml` (`releases/MOD_PREFIX-latest.zip`, twice), `tools/stringtable_validator.py` (`PROJECT_NAME`) |
+| `MOD_TITLE` | Human display name, e.g. `KAM Compat ZEN` | `README.md`, `mod.cpp`, `.hemtt/project.toml`, `workshop/steam_description.md`, `addons/main/script_mod.hpp` (`#define MOD_NAME MOD_TITLE`), `.github/workflows/discord-notice.yml` (`username`/`footer_title`), `mkdocs.yml`, `docs/index.md`, `CLAUDE.md` |
+| `MOD_REPO` | GitHub repo slug (URL-safe), e.g. `kam_compat_zen` | GitHub URLs in `README.md`/`mod.cpp`/`workshop/steam_description.md`, `.github/workflows/release-drafter.yml`'s `if:`, `.github/PULL_REQUEST_TEMPLATE.md`'s Development Guidelines link, `MOD_REPO.code-workspace` (filename too), `mkdocs.yml` and the `if:` of `.github/workflows/docs.yml`, `CLAUDE.md` |
+| `MOD_PREFIX` | HEMTT prefix / code namespace, e.g. `kcz` — lowercase, matches every addon's `#define COMPONENT` | `.hemtt/project.toml` (`prefix`), `addons/main/$PBOPREFIX$`, `addons/main/script_mod.hpp` (`#define PREFIX MOD_PREFIX`), `addons/main/stringtable.xml`, `.github/workflows/release.yml` (`releases/MOD_PREFIX-latest.zip`, twice), `tools/stringtable_validator.py` (`PROJECT_NAME`), `CLAUDE.md` |
 | `MOD_ABBR` | Short abbreviation, e.g. `KCZ` | `README.md`, `workshop/steam_description.md`, `docs/index.md` |
 
 Also:
